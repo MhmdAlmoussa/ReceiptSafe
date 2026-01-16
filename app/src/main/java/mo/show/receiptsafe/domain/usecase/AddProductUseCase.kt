@@ -9,8 +9,9 @@ class AddProductUseCase(private val repository: ProductRepository) {
         purchaseDate: Long,
         warrantyDurationMonths: Int,
         receiptImageStream: InputStream?,
-        type: String
+        type: String,
+        price: Double
     ) {
-        repository.insertProduct(name, purchaseDate, warrantyDurationMonths, receiptImageStream, type)
+        repository.insertProduct(name, purchaseDate, warrantyDurationMonths, receiptImageStream, type, price)
     }
 }

@@ -19,16 +19,19 @@ class AddProductViewModel(
     var warrantyDuration by mutableStateOf("12") // Default 12 months
     var selectedImageUri by mutableStateOf<Uri?>(null)
     var type by mutableStateOf("RECEIPT") // Default to RECEIPT
+    var price by mutableStateOf("")
 
     fun saveProduct(imageInputStream: InputStream?, onSuccess: () -> Unit) {
-        val durationInt = warrantyDuration.toIntOrNull() ?: 0 // 0 for receipts conceptually if not used
+        val durationInt = warrantyDuration.toIntOrNull() ?: 0
+        val priceDouble = price.toDoubleOrNull() ?: 0.0
         viewModelScope.launch {
             addProductUseCase(
                 name = name,
                 purchaseDate = purchaseDate,
                 warrantyDurationMonths = durationInt,
                 receiptImageStream = imageInputStream,
-                type = type
+                type = type,
+                price = priceDouble
             )
             onSuccess()
         }

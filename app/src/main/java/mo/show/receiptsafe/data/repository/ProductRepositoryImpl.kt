@@ -30,7 +30,8 @@ class ProductRepositoryImpl(
         purchaseDate: Long,
         warrantyDurationMonths: Int,
         receiptImageStream: InputStream?,
-        type: String
+        type: String,
+        price: Double
     ): Long {
         val imagePath = receiptImageStream?.let { fileStorageManager.saveImage(it) }
         val entity = ProductEntity(
@@ -38,7 +39,8 @@ class ProductRepositoryImpl(
             purchaseDate = purchaseDate,
             warrantyDurationMonths = warrantyDurationMonths,
             receiptImagePath = imagePath,
-            type = type
+            type = type,
+            price = price
         )
         productDao.insertProduct(entity)
         return 0L 
@@ -52,7 +54,8 @@ class ProductRepositoryImpl(
             purchaseDate = product.purchaseDate,
             warrantyDurationMonths = product.warrantyDurationMonths,
             receiptImagePath = product.receiptImagePath,
-            type = product.type
+            type = product.type,
+            price = product.price
         )
         productDao.deleteProduct(entity)
     }
@@ -72,6 +75,7 @@ class ProductRepositoryImpl(
             warrantyDurationMonths = warrantyDurationMonths,
             receiptImagePath = receiptImagePath,
             type = type,
+            price = price,
             isExpired = isExpired
         )
     }

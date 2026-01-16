@@ -5,8 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-// Placeholder imports for screens we haven't created yet
-import androidx.compose.material3.Text
+import mo.show.receiptsafe.ui.screens.MainScreen
 
 @Composable
 fun ReceiptSafeNavGraph(
@@ -14,10 +13,10 @@ fun ReceiptSafeNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "home"
+        startDestination = "main"
     ) {
-        composable("home") {
-            mo.show.receiptsafe.ui.screens.dashboard.DashboardScreen(
+        composable("main") {
+            MainScreen(
                 onAddProductClick = { navController.navigate("add_product") },
                 onProductClick = { productId -> navController.navigate("product_detail/$productId") }
             )

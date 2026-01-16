@@ -34,7 +34,30 @@ class DashboardViewModel(
                 FilterType.RECEIPT -> products.filter { it.type == "RECEIPT" }
                 FilterType.WARRANTY -> products.filter { it.type == "WARRANTY" }
             }
-            DashboardUiState(items = filtered)
+            
+            // Calculate Stats
+            val calendar = java.util.Calendar.getInstance()
+            val currentYear = calendar.get(java.util.Calendar.YEAR)
+            val currentMonth = calendar.get(java.util.Calendar.MONTH)
+            
+            val totalSpent = products.sumOf { it.price }
+            val yearlySpent = products.filter { 
+                calendar.timeInMillis = it.purchaseDate
+                calendar.get(java.util.Calendar.YEAR) == currentYear
+            }.sumOf { it.price }
+            
+            val monthlySpent = products.filter {
+                calendar.timeInMillis = it.purchaseDate
+                calendar.get(java.util.Calendar.YEAR) == currentYear &&
+                calendar.get(java.util.Calendar.MONTH) == currentMonth
+            }.sumOf { it.price }
+
+            DashboardUiState(
+                items = filtered,
+                totalSpent = totalSpent,
+                spentThisYear = yearlySpent,
+                spentThisMonth = monthlySpent
+            )
         }
         .stateIn(
             scope = viewModelScope,
@@ -46,5 +69,8 @@ class DashboardViewModel(
 enum class FilterType { ALL, RECEIPT, WARRANTY }
 
 data class DashboardUiState(
-    val items: List<Product> = emptyList()
+    val items: List<Product> = emptyList(),
+    val totalSpent: Double = 0.0,
+    val spentThisYear: Double = 0.0,
+    val spentThisMonth: Double = 0.0
 )

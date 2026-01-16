@@ -12,5 +12,6 @@ data class ProductEntity(
     val warrantyDurationMonths: Int,
     val receiptImagePath: String?, // Path to internal storage
     val type: String, // "WARRANTY" or "RECEIPT"
+    val price: Double = 0.0,
     val createdAt: Long = System.currentTimeMillis()
 )
