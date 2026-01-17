@@ -67,7 +67,14 @@ fun AddProductScreen(
     }
 
     // Date Picker state
-    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = System.currentTimeMillis(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis <= System.currentTimeMillis()
+            }
+        }
+    )
     var showDatePicker by remember { mutableStateOf(false) }
 
     if (showDatePicker) {
@@ -263,7 +270,10 @@ fun AddProductScreen(
                     .fillMaxWidth()
                     .height(56.dp)
                     .shadow(elevation = 8.dp, shape = CircleShape),
-                enabled = viewModel.name.isNotBlank(),
+                enabled = viewModel.name.isNotBlank() && 
+                          viewModel.price.isNotBlank() && 
+                          viewModel.price.toDoubleOrNull() != null &&
+                          (viewModel.type != "WARRANTY" || viewModel.warrantyDuration.isNotBlank()),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = BrandColor

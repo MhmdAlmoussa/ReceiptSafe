@@ -52,11 +52,16 @@ class DashboardViewModel(
                 calendar.get(java.util.Calendar.MONTH) == currentMonth
             }.sumOf { it.price }
 
+            val spentOnReceipts = products.filter { it.type == "RECEIPT" }.sumOf { it.price }
+            val spentOnWarranties = products.filter { it.type == "WARRANTY" }.sumOf { it.price }
+
             DashboardUiState(
                 items = filtered,
                 totalSpent = totalSpent,
                 spentThisYear = yearlySpent,
-                spentThisMonth = monthlySpent
+                spentThisMonth = monthlySpent,
+                spentOnReceipts = spentOnReceipts,
+                spentOnWarranties = spentOnWarranties
             )
         }
         .stateIn(
@@ -72,5 +77,7 @@ data class DashboardUiState(
     val items: List<Product> = emptyList(),
     val totalSpent: Double = 0.0,
     val spentThisYear: Double = 0.0,
-    val spentThisMonth: Double = 0.0
+    val spentThisMonth: Double = 0.0,
+    val spentOnReceipts: Double = 0.0,
+    val spentOnWarranties: Double = 0.0
 )

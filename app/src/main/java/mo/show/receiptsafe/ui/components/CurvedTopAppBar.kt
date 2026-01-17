@@ -2,6 +2,8 @@ package mo.show.receiptsafe.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,7 +30,8 @@ import mo.show.receiptsafe.ui.theme.ReceiptTeal
 @Composable
 fun CurvedTopAppBar(
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -56,6 +59,16 @@ fun CurvedTopAppBar(
             color = Color.White,
             modifier = Modifier.padding(bottom = 24.dp) // Push text up slightly
         )
+        
+        // Actions Row
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 16.dp, end = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            actions()
+        }
     }
 }
 

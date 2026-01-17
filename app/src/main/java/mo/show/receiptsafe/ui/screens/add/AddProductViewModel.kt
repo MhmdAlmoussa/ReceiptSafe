@@ -22,6 +22,8 @@ class AddProductViewModel(
     var price by mutableStateOf("")
 
     fun saveProduct(imageInputStream: InputStream?, onSuccess: () -> Unit) {
+        if (!validateInput()) return
+
         val durationInt = warrantyDuration.toIntOrNull() ?: 0
         val priceDouble = price.toDoubleOrNull() ?: 0.0
         viewModelScope.launch {
@@ -35,5 +37,13 @@ class AddProductViewModel(
             )
             onSuccess()
         }
+    }
+
+    private fun validateInput(): Boolean {
+        if (name.isBlank()) return false
+        if (price.toDoubleOrNull() == null || price.toDouble() <= 0) return false
+        if (purchaseDate > System.currentTimeMillis()) return false
+        if (type == "WARRANTY" && warrantyDuration.toIntOrNull() == null) return false
+        return true
     }
 }

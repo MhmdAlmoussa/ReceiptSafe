@@ -1,6 +1,7 @@
 package mo.show.receiptsafe.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import mo.show.receiptsafe.data.database.ProductDao
 import mo.show.receiptsafe.data.database.ProductEntity
@@ -58,6 +59,36 @@ class ProductRepositoryImpl(
             price = product.price
         )
         productDao.deleteProduct(entity)
+    }
+
+    override suspend fun deleteAllProducts() {
+        productDao.deleteAll()
+    }
+
+    override suspend fun importProducts(products: List<Product>) {
+        // Fetch current products to check for duplicates
+        val existingProducts = productDao.getAllProducts().first()
+        
+        products.forEach { product ->
+            // Check if product already exists (matching name, date, price)
+            val isDuplicate = existingProducts.any { existing ->
+                existing.name == product.name && 
+                existing.purchaseDate == product.purchaseDate && 
+                existing.price == product.price
+            }
+
+            if (!isDuplicate) {
+                val entity = ProductEntity(
+                    name = product.name,
+                    purchaseDate = product.purchaseDate,
+                    warrantyDurationMonths = product.warrantyDurationMonths,
+                    receiptImagePath = product.receiptImagePath,
+                    type = product.type,
+                    price = product.price
+                )
+                productDao.insertProduct(entity.copy(id = 0))
+            }
+        }
     }
 
     private fun ProductEntity.toDomain(): Product {

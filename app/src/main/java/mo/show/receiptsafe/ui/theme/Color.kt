@@ -17,3 +17,4 @@ val WarrantyOrange = Color(0xFFFF9800)
 val ExpiredRed = Color(0xFFD32F2F)
 val ActiveGreen = Color(0xFF388E3C)
 val SurfaceColor = Color(0xFFF7F7F7)
+val SecondaryColor = WarrantyOrange

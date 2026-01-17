@@ -13,6 +13,7 @@ import mo.show.receiptsafe.domain.usecase.GetProductsUseCase
 import mo.show.receiptsafe.ui.screens.add.AddProductViewModel
 import mo.show.receiptsafe.ui.screens.dashboard.DashboardViewModel
 import mo.show.receiptsafe.ui.screens.detail.ProductDetailViewModel
+import mo.show.receiptsafe.ui.screens.settings.SettingsViewModel
 
 // will add others later
 
@@ -20,19 +21,28 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             DashboardViewModel(
-                GetProductsUseCase(receiptSafeApplication().container.productRepository)
+                receiptSafeApplication().container.getProductsUseCase
             )
         }
         initializer {
             AddProductViewModel(
-                AddProductUseCase(receiptSafeApplication().container.productRepository)
+                receiptSafeApplication().container.addProductUseCase
             )
         }
         initializer {
             ProductDetailViewModel(
                 this.createSavedStateHandle(),
-                GetProductUseCase(receiptSafeApplication().container.productRepository),
-                DeleteProductUseCase(receiptSafeApplication().container.productRepository)
+                receiptSafeApplication().container.getProductUseCase,
+                receiptSafeApplication().container.deleteProductUseCase
+            )
+        }
+        initializer {
+            SettingsViewModel(
+                deleteAllProductsUseCase = receiptSafeApplication().container.deleteAllProductsUseCase,
+                settingsManager = receiptSafeApplication().container.settingsManager,
+                backupManager = receiptSafeApplication().container.backupManager,
+                getProductsUseCase = receiptSafeApplication().container.getProductsUseCase,
+                importProductsUseCase = receiptSafeApplication().container.importProductsUseCase
             )
         }
     }
